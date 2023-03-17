@@ -6,7 +6,7 @@ from job import Job
 from scheduler import Scheduler
 
 
-def delayed(name):
+def delayed(name: str):
     print(f'Hi, {name}!')
 
 

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import logging
 import os
 from threading import Thread, Event
+from typing import Any, Callable, List
 
 from constants import LOGGER_NAME, JOBS_FOLDER, DELAYED_JOBS_FOLDER
 from job import Job
@@ -11,7 +12,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 class JobThread(Thread):
-    def __init__(self, target, args):
+    def __init__(self, target: Callable, args: List[Any]):
         self.target = target
         self.args = args
         super().__init__()
@@ -39,16 +40,8 @@ class SuccessJob:
     finished_at: datetime
 
 
-# def coroutine(func):
-#     def wrapper(*args, **kwargs):
-#         generator = func(*args, **kwargs)
-#         generator.send(None)
-#         return generator
-#     return wrapper
-
-
 class Scheduler:
-    def __init__(self, pool_size=10):
+    def __init__(self, pool_size: int = 10):
         self.__pool = {inx: None for inx, i in enumerate(range(pool_size))}
         self.__success_jobs = []
         self.__tries = {}
@@ -120,7 +113,7 @@ class Scheduler:
             self.__put(job)
 
     @staticmethod
-    def load_job(file_name) -> Job:
+    def load_job(file_name: str) -> Job:
         with open(file_name, 'rb') as job_data:
             return Job.deserialize(job_data.read())
 

@@ -1,12 +1,13 @@
 from datetime import datetime
 import pickle
 import uuid
+from typing import Any, Callable, List
 
 
 class Job:
     def __init__(self,
-                 func,
-                 args,
+                 func: Callable,
+                 args: List[Any],
                  start_at: datetime = None,
                  max_working_time: int = -1,
                  tries: int = 0,
@@ -50,7 +51,7 @@ class Job:
         return pickle.dumps(self)
 
     @staticmethod
-    def deserialize(data):
+    def deserialize(data: Any):
         return pickle.loads(data)
 
     def run(self):
