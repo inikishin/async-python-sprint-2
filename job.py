@@ -11,7 +11,7 @@ class Job:
                  start_at: datetime = None,
                  max_working_time: int = -1,
                  tries: int = 0,
-                 dependencies = [],
+                 dependencies = None,
                  ):
         self.__func = func
         self.__args = args
@@ -21,7 +21,7 @@ class Job:
         self.path = None
         self.__max_working_time = max_working_time
         self.__tries = tries
-        self.__dependencies = dependencies
+        self.__dependencies = dependencies if dependencies else []
 
     @property
     def id(self):
@@ -33,7 +33,7 @@ class Job:
 
     @property
     def is_delayed(self):
-        return False if self.__start_at is None else True
+        return self.__start_at is not None
 
     @property
     def start_at(self):
