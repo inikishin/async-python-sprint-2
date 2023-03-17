@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import logging
 import os
 from threading import Thread, Event
-from typing import Any, Callable, List
+from typing import Any, Callable, Tuple
 
 from constants import LOGGER_NAME, JOBS_FOLDER, DELAYED_JOBS_FOLDER
 from job import Job
@@ -12,7 +12,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 class JobThread(Thread):
-    def __init__(self, target: Callable, args: List[Any]):
+    def __init__(self, target: Callable, args: Tuple[Any]):
         self.target = target
         self.args = args
         super().__init__()

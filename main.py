@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
 import time
 
-from config import logger
+from config.logger import logger
 from job import Job
 from scheduler import Scheduler
 
 
-def delayed(name: str):
-    print(f'Hi, {name}!')
+def delayed(name):
+    logger.info(f'Hi, {name}!')
 
 
 s = Scheduler(pool_size=2)

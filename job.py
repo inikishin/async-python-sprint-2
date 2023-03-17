@@ -1,13 +1,14 @@
 from datetime import datetime
 import pickle
+from typing import Any, Callable, Tuple
 import uuid
-from typing import Any, Callable, List
 
+from config.logger import logger
 
 class Job:
     def __init__(self,
                  func: Callable,
-                 args: List[Any],
+                 args: Tuple[Any],
                  start_at: datetime = None,
                  max_working_time: int = -1,
                  tries: int = 0,
@@ -55,7 +56,7 @@ class Job:
         return pickle.loads(data)
 
     def run(self):
-        print(f'Run job [{self.__id}] "{self.__func.__name__}" with params: {self.__args}')
+        logger.info(f'Run job [{self.__id}] "{self.__func.__name__}" with params: {self.__args}')
         return self.__func(*self.__args)
 
     def pause(self):
