@@ -8,7 +8,7 @@ from config.logger import logger
 class Job:
     def __init__(self,
                  func: Callable,
-                 args: Tuple[Any],
+                 args: Tuple[Any] = None,
                  start_at: datetime = None,
                  max_working_time: int = -1,
                  tries: int = 0,

@@ -30,3 +30,7 @@ j = Job(delayed, ('Ilya', ), start_at=datetime.now() + timedelta(seconds=15))
 scheduler.send(j)
 
 s.run()
+
+time.sleep(10)
+
+s.stop()

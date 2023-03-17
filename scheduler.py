@@ -46,7 +46,7 @@ class Scheduler:
         self.__success_jobs = []
         self.__tries = {}
         self.__init_file_struct()
-        self.__stop = False
+        self.__is_running = True
 
     def __del(self):
         self.__lock_file.close()
@@ -113,6 +113,9 @@ class Scheduler:
         if datetime.now().timestamp() > job.start_at:
             self.__put(job)
 
+    def is_running(self):
+        return self.__is_running
+
     @staticmethod
     def load_job(file_name: str) -> Job:
         with open(file_name, 'rb') as job_data:
@@ -129,9 +132,10 @@ class Scheduler:
                 with open(job_file_name, 'wb') as job_file:
                     job_file.write(job.serialize())
 
-    def run(self):
+    def _run(self):
+        self.__is_running = True
         while True:
-            if self.__stop:
+            if not self.__is_running:
                 break
             logger.info('Pending jobs: %s', self.__pool)
             logger.info('Success jobs: %s', self.__success_jobs)
@@ -155,9 +159,13 @@ class Scheduler:
                     if execution_time > pending_job.job.max_working_time:
                         pending_job.thread.stop()
 
+    def run(self):
+        t = Thread(target=self._run)
+        t.start()
+
     def restart(self):
         self.stop()
         self.run()
 
     def stop(self):
-        self.__stop = True
+        self.__is_running = False
