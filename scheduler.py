@@ -46,6 +46,7 @@ class Scheduler:
         self.__success_jobs = []
         self.__tries = {}
         self.__init_file_struct()
+        self.__stop = False
 
     def __del(self):
         self.__lock_file.close()
@@ -130,6 +131,8 @@ class Scheduler:
 
     def run(self):
         while True:
+            if self.__stop:
+                break
             logger.info('Pending jobs: %s', self.__pool)
             logger.info('Success jobs: %s', self.__success_jobs)
             for job_file in os.listdir(JOBS_FOLDER):
@@ -153,7 +156,8 @@ class Scheduler:
                         pending_job.thread.stop()
 
     def restart(self):
-        pass
+        self.stop()
+        self.run()
 
     def stop(self):
-        pass
+        self.__stop = True
